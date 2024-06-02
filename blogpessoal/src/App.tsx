@@ -1,6 +1,3 @@
-
-import './App.css';
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Footer from './components/footer/Footer'
 import Navbar from './components/navbar/Navbar'
@@ -10,19 +7,20 @@ import Cadastro from './pages/cadastro/Cadastro'
 import { AuthProvider } from './contexts/AuthContext'
 import FormTema from './components/tema/formtema/FormTema'
 import ListaTemas from './components/tema/listatemas/ListaTemas'
-import DeletarTema from './components/tema/deletartema/DeletarTema';
-
+import DeletarTema from './components/tema/deletartema/DeletarTema'
+import Perfil from './pages/perfil/Perfil'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import DeletarPostagem from './components/postagens/DeletarPostagem'
+import FormPostagem from './components/postagens/FormPostagens'
+import ListaPostagens from './components/postagens/ListaPostagens'
 
 function App() {
     return (
         <>
-            {/* 
-                Envolvemos todos os Componentes inseridos no Componente App, 
-                com o Componente AuthProvider. 
-                Desta forma, todos os Componentes dentro dele, terão acesso 
-                aos Estados e Funções guardados na context.**
-            */}
+    
             <AuthProvider>
+                <ToastContainer />
                 <BrowserRouter>
                     <Navbar />
                     <div className='min-h-[80vh]'>
@@ -35,6 +33,11 @@ function App() {
                             <Route path="/cadastrartema" element={<FormTema />} />
                             <Route path="/editartema/:id" element={<FormTema />} />
                             <Route path="/deletartema/:id" element={<DeletarTema />} />
+                            <Route path="/postagens" element={<ListaPostagens />} />
+                            <Route path="/cadastrarpostagem" element={<FormPostagem />} />
+                            <Route path="/editarpostagem/:id" element={<FormPostagem />} />
+                            <Route path="/deletarpostagem/:id" element={<DeletarPostagem />} />
+                            <Route path="/perfil" element={<Perfil />} />
                         </Routes>
                     </div>
                     <Footer />

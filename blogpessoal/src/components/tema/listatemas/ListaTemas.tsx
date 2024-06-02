@@ -5,6 +5,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Tema from "../../../models/Tema";
 import { buscar } from "../../../services/Service";
 import CardTemas from "../cardtemas/CardTemas";
+import React from "react";
 
 function ListaTemas() {
 

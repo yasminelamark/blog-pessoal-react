@@ -1,17 +1,19 @@
-import  { ChangeEvent, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import './Cadastro.css'
-import { cadastrarUsuario } from '../../services/Service'
 import Usuario from '../../models/Usuario'
-import { RotatingLines } from 'react-loader-spinner'
-
+import { cadastrarUsuario } from '../../services/Service';
+import { useNavigate } from 'react-router-dom';
+import { RotatingLines } from 'react-loader-spinner';
+import { ToastAlerta } from '../../utils/ToastAlerta';
 
 function Cadastro() {
 
-  let navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
 
-  const [confirmaSenha, setConfirmaSenha] = useState<string>("")
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [confirmaSenha, setConfirmaSenha] = useState<string>('');
 
   const [usuario, setUsuario] = useState<Usuario>({
     id: 0,
@@ -19,28 +21,16 @@ function Cadastro() {
     usuario: '',
     senha: '',
     foto: ''
-  })
-
-  const [usuarioResposta, setUsuarioResposta] = useState<Usuario>({
-    id: 0,
-    nome: '',
-    usuario: '',
-    senha: '',
-    foto: ''
-  })
+  });
 
   useEffect(() => {
-    if (usuarioResposta.id !== 0) {
-      back()
+    if (usuario.id !== 0) {
+      retornar();
     }
-  }, [usuarioResposta])
+  }, [usuario]);
 
-  function back() {
+  function retornar() {
     navigate('/login')
-  }
-
-  function handleConfirmarSenha(e: ChangeEvent<HTMLInputElement>) {
-    setConfirmaSenha(e.target.value)
   }
 
   function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
@@ -50,33 +40,54 @@ function Cadastro() {
     })
   }
 
-  async function cadastrarNovoUsuario(e: ChangeEvent<HTMLFormElement>) {
-    e.preventDefault()
+  /**
+   * Essa função é utilizada para atualizar o Estado confirmaSenha, 
+   * com o valor inserido pelo usuário no input confirmarSenha. Sempre que o usuário digita algo nesse campo, essa função é chamada e atualiza o Estado. 
+   */
+  function handleConfirmaSenha(e: ChangeEvent<HTMLInputElement>) {
+    setConfirmaSenha(e.target.value);
+  }
 
+
+  async function cadastrarNovoUsuario(e: FormEvent<HTMLFormElement>) {
+
+
+    e.preventDefault();
+
+  
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
+
+
       setIsLoading(true)
 
       try {
-        await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuarioResposta)
-        alert('Usuário cadastrado com sucesso')
+
+        await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario);
+        ToastAlerta('Usuário cadastrado com sucesso!', 'sucesso');
 
       } catch (error) {
-      alert('Erro ao cadastrar usuário')
+        ToastAlerta('Erro ao cadastrar o usuário!', 'erro')
       }
 
     } else {
-    alert('Dados inconsistentes. Verifique as informações de cadastro.')
-      setUsuario({ ...usuario, senha: "" }) // Reinicia o campo de Senha
-      setConfirmaSenha("")                  // Reinicia o campo de Confirmar Senha
+      ToastAlerta("Dados estão inconsistentes! Verifique os dados do usuário.", 'erro');
+      setUsuario({ ...usuario, senha: '' });
+      setConfirmaSenha('');
     }
+
     setIsLoading(false)
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 h-screen place-items-center font-bold">
+      <div className="grid grid-cols-1 lg:grid-cols-2 h-screen 
+            place-items-center font-bold">
         <div className="fundoCadastro hidden lg:block"></div>
-        <form className='flex justify-center items-center flex-col w-2/3 gap-3' onSubmit={cadastrarNovoUsuario}>
+
+ 
+        <form className='flex justify-center items-center flex-col w-2/3 gap-3'
+          onSubmit={cadastrarNovoUsuario}
+        >
           <h2 className='text-slate-900 text-5xl'>Cadastrar</h2>
           <div className="flex flex-col w-full">
             <label htmlFor="nome">Nome</label>
@@ -86,7 +97,9 @@ function Cadastro() {
               name="nome"
               placeholder="Nome"
               className="border-2 border-slate-700 rounded p-2"
-              value={usuario.nome} 
+    
+              value={usuario.nome}
+
               onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
             />
           </div>
@@ -98,7 +111,10 @@ function Cadastro() {
               name="usuario"
               placeholder="Usuario"
               className="border-2 border-slate-700 rounded p-2"
-              value={usuario.usuario} 
+
+              value={usuario.usuario}
+
+        
               onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
             />
           </div>
@@ -110,7 +126,11 @@ function Cadastro() {
               name="foto"
               placeholder="Foto"
               className="border-2 border-slate-700 rounded p-2"
-              value={usuario.foto} 
+
+       
+              value={usuario.foto}
+
+
               onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
             />
           </div>
@@ -122,7 +142,11 @@ function Cadastro() {
               name="senha"
               placeholder="Senha"
               className="border-2 border-slate-700 rounded p-2"
-              value={usuario.senha} 
+
+ 
+              value={usuario.senha}
+
+     
               onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
             />
           </div>
@@ -134,23 +158,36 @@ function Cadastro() {
               name="confirmarSenha"
               placeholder="Confirmar Senha"
               className="border-2 border-slate-700 rounded p-2"
+
+      
               value={confirmaSenha}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleConfirmarSenha(e)}
+
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleConfirmaSenha(e)}
             />
           </div>
           <div className="flex justify-around w-full gap-8">
-            <button className='rounded text-white bg-red-400 hover:bg-red-700 w-1/2 py-2' onClick={back}>
+        
+            <button className='rounded text-white bg-red-400 
+                  hover:bg-red-700 w-1/2 py-2'
+              onClick={retornar}
+            >
               Cancelar
             </button>
-            <button className='rounded text-white bg-indigo-400 hover:bg-indigo-900 w-1/2 py-2 flex justify-center ' type='submit'>
-            {isLoading ? <RotatingLines
-            strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="24"
-            visible={true}
-          /> :
-            <span>Cadastrar</span>}
+            <button
+              type='submit'
+              className='rounded text-white bg-indigo-400 
+                           hover:bg-indigo-900 w-1/2 py-2
+                           flex justify-center'
+            >
+              {isLoading ? <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="24"
+                visible={true}
+              /> :
+                <span>Cadastrar</span>
+              }
             </button>
           </div>
         </form>

@@ -5,17 +5,19 @@ import Tema from "../../../models/Tema";
 import { atualizar, buscar, cadastrar } from "../../../services/Service";
 import { RotatingLines } from "react-loader-spinner";
 
+
+
 function FormTema() {
 
     const navigate = useNavigate()
 
-    // Receber os dados do Tema, que será cadastrado ou atualizado
     const [tema, setTema] = useState<Tema>({} as Tema);
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const { usuario, handleLogout } = useContext(AuthContext)
     const token = usuario.token
 
+ 
     const { id } = useParams<{ id: string }>()
 
     async function buscarPorId(id: string) {
@@ -25,7 +27,6 @@ function FormTema() {
             })
         } catch (error: any) {
             if (error.toString().includes('401')) {
-                alert('O token expirou!')
                 handleLogout()
             }
         }
@@ -38,6 +39,7 @@ function FormTema() {
         }
     }, [token])
 
+   
     useEffect(() => {
         if (id !== undefined) {
             buscarPorId(id)
@@ -55,6 +57,7 @@ function FormTema() {
         navigate('/temas')
     }
 
+ 
     async function gerarNovoTema(e: ChangeEvent<HTMLFormElement>) {
         e.preventDefault()
         setIsLoading(true)
@@ -68,7 +71,6 @@ function FormTema() {
                 alert('Tema atualizado com sucesso!');
             } catch (error: any) {
                 if (error.toString().includes('401')) {
-                    alert('O token Expirou!')
                     handleLogout()
                 } else {
                     alert('Erro ao atualizar o Tema!')
@@ -84,7 +86,6 @@ function FormTema() {
                 alert('Tema cadastrado com sucesso!');
             } catch (error: any) {
                 if (error.toString().includes('401')) {
-                    alert('O token Expirou!')
                     handleLogout()
                 } else {
                     alert('Erro ao cadastrar o Tema!')
@@ -97,11 +98,12 @@ function FormTema() {
         retornar()
     }
 
-    console.log(JSON.stringify(tema))
-
     return (
         <div className="container flex flex-col items-center justify-center mx-auto">
             <h1 className="text-4xl text-center my-8">
+
+                
+                
                 {id === undefined ? 'Cadastrar Tema' : 'Editar Tema'}
             </h1>
 
@@ -121,7 +123,7 @@ function FormTema() {
                 </div>
                 <button
                     className="rounded text-slate-100 bg-indigo-400 
-                               hover:bg-indigo-800 w-1/2 py-2 mx-auto flex justify-center"
+                    hover:bg-indigo-800 w-1/2 py-2 mx-auto flex justify-center"
                     type="submit">
 
                     {isLoading ? <RotatingLines
@@ -141,3 +143,5 @@ function FormTema() {
 }
 
 export default FormTema;
+
+
