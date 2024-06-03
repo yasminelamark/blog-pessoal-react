@@ -4,6 +4,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Tema from "../../../models/Tema";
 import { atualizar, buscar, cadastrar } from "../../../services/Service";
 import { RotatingLines } from "react-loader-spinner";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 
 
@@ -17,7 +18,7 @@ function FormTema() {
     const { usuario, handleLogout } = useContext(AuthContext)
     const token = usuario.token
 
- 
+
     const { id } = useParams<{ id: string }>()
 
     async function buscarPorId(id: string) {
@@ -39,7 +40,7 @@ function FormTema() {
         }
     }, [token])
 
-   
+
     useEffect(() => {
         if (id !== undefined) {
             buscarPorId(id)
@@ -57,7 +58,7 @@ function FormTema() {
         navigate('/temas')
     }
 
- 
+
     async function gerarNovoTema(e: ChangeEvent<HTMLFormElement>) {
         e.preventDefault()
         setIsLoading(true)
@@ -68,12 +69,12 @@ function FormTema() {
                 await atualizar(`/temas`, tema, setTema, {
                     headers: { 'Authorization': token }
                 });
-                alert('Tema atualizado com sucesso!');
+                ToastAlerta('Tema atualizado com sucesso!', "sucesso");
             } catch (error: any) {
                 if (error.toString().includes('401')) {
                     handleLogout()
                 } else {
-                    alert('Erro ao atualizar o Tema!')
+                    ToastAlerta('Erro ao atualizar o Tema!',"erro")
                 }
             }
 
@@ -143,5 +144,7 @@ function FormTema() {
 }
 
 export default FormTema;
+
+
 
 

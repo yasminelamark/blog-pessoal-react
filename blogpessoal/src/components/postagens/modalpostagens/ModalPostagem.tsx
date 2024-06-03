@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 
 import 'reactjs-popup/dist/index.css';
 import './ModalPostagem.css'
-import FormPostagem from '../FormPostagens';
+import FormPostagem from '../FormPostagem';
 import React from 'react';
 
 function ModalPostagem() {

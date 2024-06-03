@@ -12,7 +12,7 @@ import Perfil from './pages/perfil/Perfil'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import DeletarPostagem from './components/postagens/DeletarPostagem'
-import FormPostagem from './components/postagens/FormPostagens'
+import FormPostagem from './components/postagens/FormPostagem'
 import ListaPostagens from './components/postagens/ListaPostagens'
 
 function App() {
